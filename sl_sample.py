@@ -22,21 +22,21 @@ st.title('Sample RAG Application')
 def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
 
-def read_pdf(file):
-    pdf_document = fitz.open(stream=file.read(), filetype="pdf")
-    text = ""
-    for page_num in range(pdf_document.page_count):
-        page = pdf_document.load_page(page_num)
-        text += page.get_text()
-    return text
+def read_document(file):
+    if uploaded_file.type == "application/pdf":
+        pdf_document = fitz.open(stream=file.read(), filetype="pdf")
+        text = ""
+        for page_num in range(pdf_document.page_count):
+            page = pdf_document.load_page(page_num)
+            text += page.get_text()
+        return text
+    else:
+        return file.read().decode()
 
 def generate_response(uploaded_file, query_text):
     if uploaded_file is not None:
-        if uploaded_file.type == "application/pdf":
-            document_text = read_pdf(uploaded_file)
-        else:
-            document_text = uploaded_file.read().decode()
 
+        document_text = read_document(uploaded_file)
         documents = [document_text]
         # Split documents into chunks
         text_splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=100)
@@ -45,7 +45,7 @@ def generate_response(uploaded_file, query_text):
         # Select embeddings
         embeddings =  OllamaEmbeddings(model="llama3.1")
         # Create a vectorstore from documents
-        database = Chroma.from_documents(texts, embeddings)
+        database = Chroma.from_documents(texts, embeddings, persist_directory="./chroma_db/data_db")
         # Create retriever interface
         retriever = database.as_retriever()
         prompt = hub.pull("rlm/rag-prompt")
