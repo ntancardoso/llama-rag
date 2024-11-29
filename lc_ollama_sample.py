@@ -1,6 +1,6 @@
 from langchain_ollama import OllamaEmbeddings
 
-embeddings_model = OllamaEmbeddings(model="llama3.1")
+embeddings_model = OllamaEmbeddings(model="llama3.2")
 
 embeddings = embeddings_model.embed_documents(
     [

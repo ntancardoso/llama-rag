@@ -1,6 +1,7 @@
 import streamlit as st
 from langchain import hub
 from langchain.text_splitter import CharacterTextSplitter
+# from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_ollama import OllamaEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_ollama import ChatOllama
@@ -39,13 +40,14 @@ def generate_response(uploaded_files, query_text):
     documents.append(document_text)
     # Split documents into chunks
     text_splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+    # text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=50)
     texts = []
     for document in documents:
         texts.extend(text_splitter.create_documents([document]))
 
-    llm = ChatOllama(model="llama3.1")
+    llm = ChatOllama(model="llama3.2")
     # Select embeddings
-    embeddings =  OllamaEmbeddings(model="llama3.1")
+    embeddings =  OllamaEmbeddings(model="llama3.2")
 
     # Create a vectorstore from documents
     database = Chroma.from_documents(texts, embeddings, persist_directory="./chroma_db/data_db")

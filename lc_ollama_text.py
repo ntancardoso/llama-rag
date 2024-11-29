@@ -18,7 +18,7 @@ documents = [
     "Artificial intelligence encompasses machine learning techniques that enable systems to learn from data."
 ]
 
-db = Chroma.from_texts(documents, OllamaEmbeddings(model="llama3.1"))
+db = Chroma.from_texts(documents, OllamaEmbeddings(model="llama3.2"))
 
 retriever = db.as_retriever(
     search_type="similarity",
@@ -52,7 +52,7 @@ context_content = retriever_context[0].page_content if retriever_context else "N
 
 augmented_query = custom_rag_prompt.format(context=context_content, question=question)
 
-llm = ChatOllama(model="llama3.1")
+llm = ChatOllama(model="llama3.2")
 llm_output = llm.invoke(augmented_query)
 
 final_output = StrOutputParser().invoke(llm_output)
