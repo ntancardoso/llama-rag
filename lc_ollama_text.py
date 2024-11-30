@@ -1,5 +1,6 @@
 from langchain_ollama import OllamaEmbeddings
-from langchain_community.vectorstores import Chroma, SKLearnVectorStore
+#from langchain_community.vectorstores import Chroma, SKLearnVectorStore
+from langchain_chroma import Chroma
 from langchain_core.prompts import PromptTemplate
 from langchain_ollama import ChatOllama
 from langchain_core.runnables import RunnablePassthrough
